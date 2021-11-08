@@ -60,7 +60,7 @@ for i in range(6):
     pakk.remove(esimene_kaart)
     esi_kaart = pygame.image.load(f"cards/{esimene_kaart.väärtus}{esimene_kaart.mast}.png")
     esi_kaart = pygame.transform.scale(esi_kaart, (esi_kaart.get_width()/scale, esi_kaart.get_height()/scale))
-    kaart = pygame.Rect((200 + i*(esi_kaart.get_width()/4), 50), (esi_kaart.get_width(), esi_kaart.get_height()))
+    kaart = pygame.Rect((150 + i*(esi_kaart.get_width()/4), 50), (esi_kaart.get_width(), esi_kaart.get_height()))
     valitudpildid.append(esi_kaart)
     valitudrect.append(kaart)
 
@@ -70,15 +70,24 @@ for i in range(6):
     pakk.remove(esimene_kaart)
     esi_kaart = pygame.image.load(f"cards/{esimene_kaart.väärtus}{esimene_kaart.mast}.png")
     esi_kaart = pygame.transform.scale(esi_kaart, (esi_kaart.get_width()/scale, esi_kaart.get_height()/scale))
-    kaart = pygame.Rect((200 + i*(esi_kaart.get_width()/4), 600), (esi_kaart.get_width(), esi_kaart.get_height()))
+    kaart = pygame.Rect((150 + i*(esi_kaart.get_width()/4), 850-kõrgus), (esi_kaart.get_width(), esi_kaart.get_height()))
     valitudpildid.append(esi_kaart)
     valitudrect.append(kaart)
+trump = random.choice(pakk)
+valitud.append(trump)
+pakk.remove(trump)
+trumbipilt = pygame.transform.rotozoom(pygame.image.load(f"cards/{trump.väärtus}{trump.mast}.png"), -90, 0.25)
+trumbirect = ((50, 450-(laius/2)), (trumbipilt.get_width(), trumbipilt.get_height()))
+tagus = pygame.image.load("tagus2.png")
+tagus = pygame.transform.scale(tagus, (laius, kõrgus))
 def draw_window():
     for i in range(3):
         for j in range(2):
             win.blit(bg, (i*500,j*500))
     for i in range(12):
         win.blit(valitudpildid[i], valitudrect[i])
+    win.blit(trumbipilt, trumbirect)
+    win.blit(tagus, (50, 450-kõrgus/2))
     pygame.display.update()
     
 while True:
@@ -92,13 +101,15 @@ while True:
             pos = pygame.mouse.get_pos()
             for i in range(12):
                 
-                if valitudrect[i].collidepoint(pos):
+                if valitudrect[len(valitudrect)-1-i].collidepoint(pos):
 #                     sammx = (valitudrect[i].x-(pos1x-kliki_counter*(10)))/30
-                    sammx = (valitudrect[i].x-pos1x)/30
-                    sammy = (valitudrect[i].y-pos1y)//30
-                    liigub = True
-                    liikuv = valitudrect[i]
-                    kliki_counter += 1
+#                     sammx = (valitudrect[i].x-pos1x)/30
+#                     sammy = (valitudrect[i].y-pos1y)//30
+#                     liigub = True
+#                     liikuv = valitudrect[i]
+#                     kliki_counter += 1
+                    valitudrect[len(valitudrect)-1-i].move_ip(-(valitudrect[len(valitudrect)-1-i].x-pos1x), -(valitudrect[len(valitudrect)-1-i].y-pos1y))
+                    break
 
                  
     keys = pygame.key.get_pressed()
