@@ -1,5 +1,6 @@
 import pygame
 import random
+import sys
 
 pygame.init()
 
@@ -34,6 +35,16 @@ win = pygame.display.set_mode((1200, 900))
 pygame.display.set_caption("Turakas")
 clock = pygame.time.Clock()
 
+# WHITE = (255, 255, 255)
+# 
+# small_font = pygame.font.SysFont("Corbel", 35)
+# 
+# nupp = small_font.render("Nupp", True, WHITE)
+# pygame.init()
+  
+
+
+ 
 x = 50
 y = 50
 width = 100
