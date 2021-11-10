@@ -31,18 +31,11 @@ for mast in mastid:
 
     
 win = pygame.display.set_mode((1200, 900))
+icon = pygame.image.load("icon.png")
 
 pygame.display.set_caption("Turakas")
+pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
-
-# WHITE = (255, 255, 255)
-# 
-# small_font = pygame.font.SysFont("Corbel", 35)
-# 
-# nupp = small_font.render("Nupp", True, WHITE)
-# pygame.init()
-  
-
 
  
 x = 50
