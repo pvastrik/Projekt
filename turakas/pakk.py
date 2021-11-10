@@ -9,6 +9,7 @@ class Pakk():
     def __init__(self, mast, väärtus):
         self.mast = mast
         self.väärtus = väärtus
+        self.tugevus = väärtused[self.väärtus]
        
 for mast in mastid:
     for kaart1 in kaardid:

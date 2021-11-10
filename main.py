@@ -41,22 +41,16 @@ liikumine = 0
 kliki_counter = 0
 
 
-trump = random.choice(PAKK)
-PAKK.remove(trump)
-trumbipilt = pygame.transform.rotozoom(pygame.image.load(f"img/cards/{trump.väärtus}{trump.mast}.png"), -90, 0.25)
-trumbirect = ((50, 450-(laius/2)), (trumbipilt.get_width(), trumbipilt.get_height()))
-tagus = pygame.image.load("img/tagus2.png")
-tagus = pygame.transform.scale(tagus, (laius, kõrgus))
+
 
 mäng = Mäng()
-mäng.loo_käsi()
+mäng.loo_käed()
 loogika = Loogika(WIN)
 def draw_window():
     mäng.draw(WIN)
     # for i in range(12):
     #     WIN.blit(valitudpildid[i], valitudrect[i])
-    WIN.blit(trumbipilt, trumbirect)
-    WIN.blit(tagus, (50, 450-kõrgus/2))
+    
     pygame.display.update()
 
 def main():    
@@ -72,6 +66,8 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 loogika.select(pos)
+                if not loogika.select(pos):
+                    continue
     #             for i in range(12):
                     
     #                 if valitudrect[len(valitudrect)-1-i].collidepoint(pos):
