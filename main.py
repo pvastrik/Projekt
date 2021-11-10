@@ -24,7 +24,8 @@ pygame.init()
 FPS = 60
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Turakas")
-
+icon = pygame.image.load("img/icon.png")
+pygame.display.set_icon(icon)
 
 x = 50
 y = 50
