@@ -15,7 +15,6 @@ class Loogika:
  
     def _init(self):
         self.valitud = None
-        #self.kaart = Kaardipilt(None, None, None)
         self.turn = 2
         self.valid_moves = {}
 
@@ -46,12 +45,6 @@ class Loogika:
 
 
     def select(self, pos):
-        # if self.valitud:
-        #     result = self._käi(None)
-        #     if not result:
-        #         self.valitud = None
-        #         self.select(pos)    
-
         kaart = self.kas_hiir(pos)
         y = True
         if kaart:

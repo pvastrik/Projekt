@@ -4,6 +4,7 @@ WIDTH, HEIGHT = 1200, 900
 KÄSI = 6
 SCALE = 4
 VÄLI = False
+
 #pildid
 BG = pygame.image.load("img/bg.jpg")
 tagus = pygame.image.load("img/tagus2.png")
