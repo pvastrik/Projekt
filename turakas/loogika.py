@@ -116,4 +116,5 @@ class Loogika:
                     self._pane(kaart)
                 else:
                     return False
+        self.mäng.kaardid_maha(self.turn)
     

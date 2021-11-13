@@ -1,8 +1,10 @@
 import pygame
 import random
+import operator
 from .constants import WIDTH, HEIGHT, BG, KÄSI, TAGUS, KÕRGUS, LAIUS, POSX, POSY, VÄLI
-from .pakk import PAKK
+from .pakk import PAKK, MASTID
 from .kaardipilt import Kaart
+
 
 KAARDID1 = []
 KAARDID2 = []
@@ -12,7 +14,6 @@ KÄIMAS2 = []
 KÄIMAS1 = []
 VÄLI = []
 TRUMP = []
-
 class Mäng():
     def __init__(self):
         self.mängija1_alles = KÄSI
@@ -42,31 +43,61 @@ class Mäng():
         PAKK.remove(temp_trump)
         self.trump = Kaart(temp_trump.mast, temp_trump.väärtus, None)
         TRUMP.append(self.trump)
+        MASTID.insert(0, MASTID.pop(MASTID.index(self.trump.kaart.mast)))
+
+    def uus_kaart(self, mängija):
+        if mängija == 1:
+            while len(MÄNGIJA1) != KÄSI and len(PAKK) != 0:
+                kaart = random.choice(PAKK)
+                PAKK.remove(kaart)
+                KAARDID1.append(Kaart(kaart.mast, kaart.väärtus, None))
+                MÄNGIJA1.append(1)
+        else:
+            while len(MÄNGIJA2) != KÄSI and len(PAKK) != 0:
+                kaart = random.choice(PAKK)
+                PAKK.remove(kaart)
+                KAARDID2.append(Kaart(kaart.mast, kaart.väärtus, None))
+                MÄNGIJA2.append(1)
 
     def draw(self, win):
         self.draw_bg(win)
-        
+        KAARDID1.sort(key=operator.attrgetter("kaart.tugevus"), reverse=True)
+        KAARDID2.sort(key=operator.attrgetter("kaart.tugevus"), reverse=True)
+        KAARDID1.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
+        KAARDID2.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
+
         for i in range(len(MÄNGIJA1)):
-            KAARDID1[i] = Kaart(KAARDID1[i].kaart.mast, KAARDID1[i].kaart.väärtus, (100 + i*100, 50))
+            KAARDID1[i].pos = (100 + i*100, 50)
+            #KAARDID1[i] = Kaart(KAARDID1[i].kaart.mast, KAARDID1[i].kaart.väärtus, (100 + i*100, 50))
             win.blit(KAARDID1[i].pilt, (100 + i*100, 50))
             #KAARDID1.append(self.mängija1[i])
         for i in range(len(MÄNGIJA2)):
-            KAARDID2[i] = Kaart(KAARDID2[i].kaart.mast, KAARDID2[i].kaart.väärtus, (100 + i*100, 850-KAARDID2[i].pilt.get_height()))
+            KAARDID2[i].pos = (100 + i*100, 850-KAARDID2[i].pilt.get_height())
+            #KAARDID2[i] = Kaart(KAARDID2[i].kaart.mast, KAARDID2[i].kaart.väärtus, (100 + i*100, 850-KAARDID2[i].pilt.get_height()))
             win.blit(KAARDID2[i].pilt, (100 + i*100, 850-KAARDID2[i].pilt.get_height()))
             #KAARDID2.append(self.mängija2[i])
 
         self.draw_trump(win)
-        if len(VÄLI) == 2:
-            KÄIMAS1.remove(KÄIMAS1[0])
-            KÄIMAS2.remove(KÄIMAS2[0])
-            VÄLI.remove(VÄLI[0])
-            VÄLI.remove(VÄLI[0])
-
         if len(KÄIMAS2) != 0:
             win.blit(KÄIMAS2[0].pilt, (POSX, POSY))
         
         if len(KÄIMAS1) != 0:
             win.blit(KÄIMAS1[0].pilt, (POSX+LAIUS/4, POSY))
+
+    def kaardid_maha(self, käik):
+        if len(VÄLI) == 2:
+            KÄIMAS1.remove(KÄIMAS1[0])
+            KÄIMAS2.remove(KÄIMAS2[0])
+            VÄLI.remove(VÄLI[0])
+            VÄLI.remove(VÄLI[0])
+            if käik == 2:
+                self.uus_kaart(2)
+                self.uus_kaart(1)
+            else:
+                self.uus_kaart(1)
+                self.uus_kaart(2)
+
+        
         
         
 
