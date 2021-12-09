@@ -1,9 +1,9 @@
 import pygame
 import random
 import ctypes
-from turakas.constants import WIDTH, HEIGHT, POSX, POSY
+from turakas.constants import WIDTH, HEIGHT, POSX, POSY, KÄIK
 from turakas.pakk import PAKK
-from turakas.mäng import Mäng, MASTID
+from turakas.mäng import Mäng
 from turakas.loogika import Loogika
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
@@ -22,15 +22,13 @@ pygame.init()
 # käigu lõpus läheb kord järgmisele
 
 FPS = 60
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SRCALPHA)
 pygame.display.set_caption("Turakas")
 icon = pygame.image.load("img/icon.png")
 pygame.display.set_icon(icon)
 
 
-print(MASTID)
 mäng = Mäng()
-mäng.loo_käed()
 loogika = Loogika(WIN)
 def draw_window():
     mäng.draw(WIN)
@@ -39,6 +37,7 @@ def draw_window():
 
 def main():    
     clock = pygame.time.Clock()
+    mäng.loo_käed()
 
     while True:
         clock.tick(FPS)
@@ -51,8 +50,7 @@ def main():
                 pos = pygame.mouse.get_pos()
                 if not loogika.select(pos):
                     continue
-    
-
+                
                     
         keys = pygame.key.get_pressed()
 
