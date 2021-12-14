@@ -289,24 +289,24 @@ class Loogika:
         VÄLIVÄÄRTUS.append(kaart.kaart.väärtus)
         if self.turn == 2:
             if not kaart2:
-                KÄIMAS.append(kaart)
-                kaart.pos = KOHAD[KÄIMAS.index(kaart)]
                 KAARDID2.remove(kaart)
+                kaart.pos = KOHAD[len(KÄIMAS)]
+                KÄIMAS.append(kaart)
             else:
-                TAPMAS.append(kaart)
-                kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
-                kaart2.tappa = False
                 KAARDID1.remove(kaart)
+                kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
+                TAPMAS.append(kaart)
+                kaart2.tappa = False
         else:
             if not kaart2:
-                KÄIMAS.append(kaart)
-                kaart.pos = KOHAD[KÄIMAS.index(kaart)]
                 KAARDID1.remove(kaart)
+                kaart.pos = KOHAD[len(KÄIMAS)]
+                KÄIMAS.append(kaart)
             else:
-                TAPMAS.append(kaart)
-                kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
-                kaart2.tappa = False
                 KAARDID2.remove(kaart)
+                kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
+                TAPMAS.append(kaart)
+                kaart2.tappa = False
         # if len(VÄLI) == 8:
         #     self.mäng.kaardid_maha(self.turn)     
         #     self.vaheta_käik()   
