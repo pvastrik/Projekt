@@ -58,5 +58,6 @@ def main():
 
         
         draw_window()
-            
-main()
+        
+if __name__ == "__main__":            
+    main()
