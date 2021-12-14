@@ -14,6 +14,7 @@ VÄLI = []
 VÄLIVÄÄRTUS = []
 TRUMP = []
 VALID =[]
+KORD = [2]
 class Mäng():
     def __init__(self):
         self.mängija1_alles = KÄSI
@@ -94,7 +95,11 @@ class Mäng():
                 pygame.draw.rect(win, (0, 0, 0), pygame.Rect((nonii.pos[0]-2, nonii.pos[1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
             else:
                 pygame.draw.rect(win, (255, 0, 0), pygame.Rect((nonii.pos[0]-2, nonii.pos[1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
-
+        if KORD[0] == 2:
+            pygame.draw.circle(win, (255, 0, 0), (100, 500),20)
+        elif KORD[0] ==1:
+            pygame.draw.circle(win, (255, 0, 0), (100, 400), 20)
+            
             #pygame.draw.circle(win, (0, 255, 0, 127), (nonii.pos[0]+LAIUS/2, nonii.pos[1]+KÕRGUS/2),20)
             # pygame.draw.lines(win, (0, 0, 255), False, ((nonii.pos[0], nonii.pos[1]+20), nonii.pos, (nonii.pos[0]+20, nonii.pos[1])), 8)
     def kaardid_maha(self, käik):

@@ -1,6 +1,6 @@
 import pygame
-from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID
-from .constants import LAIUS, KÄIK, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
+from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID, KORD
+from .constants import LAIUS, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
 from .pakk import Pakk, PAKK
 from .kaardipilt import Kaart
 
@@ -68,6 +68,8 @@ class Loogika:
         self.valitud = None
 
     def select(self, pos):
+        KORD.clear()
+        KORD.append(self.turn)
         self.kaart = self.kas_hiir(pos)
         if self.kaart == 2:
             if self.turn == 2:
