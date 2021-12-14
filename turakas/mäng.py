@@ -61,21 +61,20 @@ class Mäng():
         KAARDID2.sort(key=operator.attrgetter("kaart.tugevus"), reverse=True)
         KAARDID1.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
         KAARDID2.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
+
+        self.kaartide_kohad()
         for i, kaard in enumerate(KAARDID1):
-            kaard.pos = KOHAD1[i]
+            kaard.pos = KOHAD1[0][i]
             win.blit(TAGUS, kaard.pos)
+
         for i, kaard in enumerate(KAARDID2):
-            kaard.pos = KOHAD2[i]
+            kaard.pos = KOHAD2[0][i]
+            win.blit(kaard.pilt, kaard.pos)
 
-        # for kaart in KAARDID1:
-        #     # KAARDID1[i].pos = (100 + i*80, 50)
-        #     # win.blit(KAARDID1[i].pilt, (100 + i*80, 50))
+        # for kaart in KAARDID2:
+        #     # KAARDID2[i].pos = (100 + i*80, 850-KAARDID2[i].pilt.get_height())
+        #     # win.blit(KAARDID2[i].pilt, (100 + i*80, 850-KÕRGUS))
         #     win.blit(kaart.pilt, kaart.pos)
-
-        for kaart in KAARDID2:
-            # KAARDID2[i].pos = (100 + i*80, 850-KAARDID2[i].pilt.get_height())
-            # win.blit(KAARDID2[i].pilt, (100 + i*80, 850-KÕRGUS))
-            win.blit(kaart.pilt, kaart.pos)
         self.draw_trump(win)
         self.kaartide_arv(win)
         if KÄIMAS:
@@ -93,7 +92,7 @@ class Mäng():
             elif nonii.kaart.mast in ["Ärtu", "Ruutu"]:
                 pygame.draw.rect(win, (0, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
             else:
-                pygame.draw.rect(win, (0, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
+                pygame.draw.rect(win, (255, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
             #pygame.draw.circle(win, (0, 255, 0, 127), (nonii.pos[0]+LAIUS/2, nonii.pos[1]+KÕRGUS/2),20)
             # pygame.draw.lines(win, (0, 0, 255), False, ((nonii.pos[0], nonii.pos[1]+20), nonii.pos, (nonii.pos[0]+20, nonii.pos[1])), 8)
     def kaardid_maha(self, käik):
@@ -107,6 +106,14 @@ class Mäng():
         else:
             self.uus_kaart(1)
             self.uus_kaart(2)
+    
+    def kaartide_kohad(self):
+        if len(KAARDID1) > 10:
+            KOHAD1.clear()
+            KOHAD1.append([(100 + i*(80-(len(KAARDID1)-10)*5), 50) for i in range(30)])
+        if len(KAARDID2) > 10:
+            KOHAD2.clear()
+            KOHAD2.append([(100 + i*(80-(len(KAARDID2)-10)*5), 850-KÕRGUS) for i in range(30)])
 
     def saab_tappa(self, kaart1, kaart2):
         trumbimast = TRUMP[0].kaart.mast
