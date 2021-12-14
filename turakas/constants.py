@@ -1,6 +1,6 @@
 import pygame
 
-WIDTH, HEIGHT = 1200, 900
+WIDTH, HEIGHT = 1500, 900
 KÄSI = 6
 SCALE = 4
 KÄIK = False
