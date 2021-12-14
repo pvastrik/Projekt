@@ -1,6 +1,8 @@
 import pygame
 import random
 import ctypes
+
+from pygame.constants import RESIZABLE
 from turakas.constants import WIDTH, HEIGHT, POSX, POSY, KÄIK
 from turakas.pakk import PAKK
 from turakas.mäng import Mäng
@@ -22,7 +24,7 @@ pygame.init()
 # käigu lõpus läheb kord järgmisele
 
 FPS = 60
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SRCALPHA)
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Turakas")
 icon = pygame.image.load("img/icon.png")
 pygame.display.set_icon(icon)
@@ -48,7 +50,7 @@ def main():
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                if not loogika.select(pos):
+                if not loogika.select2(pos):
                     continue
                 
                     

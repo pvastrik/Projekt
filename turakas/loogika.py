@@ -1,4 +1,5 @@
 import pygame
+import operator
 from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID
 from .constants import LAIUS, KÄIK, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
 from .pakk import Pakk, PAKK
@@ -55,9 +56,12 @@ class Loogika:
             rect_kaart = pygame.Rect(kard.pos, (LAIUS, KÕRGUS))
             if rect_kaart.collidepoint(pos):
                 return kard
-        rect_pakk = pygame.Rect((50, 450-(KÕRGUS/2)), (LAIUS, KÕRGUS))
-        if rect_pakk.collidepoint(pos):
+        rect_pakk1 = pygame.Rect((50, 450-(KÕRGUS/2)), (LAIUS, KÕRGUS/2))
+        if rect_pakk1.collidepoint(pos):
             return 2
+        rect_pakk2 = pygame.Rect((50, 450), (LAIUS, KÕRGUS/2))
+        if rect_pakk2.collidepoint(pos):
+            return 3
         rect_trump = pygame.Rect((50, 450-(LAIUS/2)), (KÕRGUS, LAIUS))
         if rect_trump.collidepoint(pos):
             return 1
@@ -139,13 +143,120 @@ class Loogika:
                 else:
                     if self.kaart in KAARDID1:
                         if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS or not VÄLI:
-                            KÄIK = True
                             if not self._pane(self.kaart):
                                 return False
                 
                     
                     
+    def select2(self, pos):
+        self.kaart = self.kas_hiir(pos)
+        if self.kaart == 2:
+            self.mäng.kaardid_maha(self.turn)
+            self.vaheta_käik()
+        if self.kaart == 1:
+            self.arvuti_käik()
+        if self.kaart == 3:
+            for kaart in VÄLI:
+                KAARDID2.append(kaart)
+                kaart.tappa = True
+            self.mäng.kaardid_maha(self.turn)
+        if not self.kaart:
+            self.reset_valik()
+        else:
+            if self.turn == 2:
+                if self.kaart in KAARDID2:
+                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS or not VÄLI:
+                        if not self._pane(self.kaart):
+                            return False
+            else:
+                if self.kaart in KAARDID2:  
+                    self.reset_valik()
+                    self.valitud = self.kaart
+                    self.mäng.get_validmoves(self.kaart)
+                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS and not TAPMAS:
+                        if not VALID:
+                            self.vaheta_käik()
+                            self._pane(self.kaart)
+                            self.reset_valik()
+                        else:
+                            VALID.append(Kaart(None, None, KOHAD[len(KÄIMAS)]))
+                    else:
+                        self.reset_valik()
+                        self.valitud = self.kaart
+                        self.mäng.get_validmoves(self.kaart)
+                elif self.valitud:
+                    if self.kaart in VALID:
+                        if not self.kaart.kaart:
+                            self.vaheta_käik()
+                            self._pane(self.valitud)
+                        else:
+                            self._pane(self.valitud, self.kaart)
+                            self.kaart.tappa = False
+                    self.reset_valik()
+    def arvuti_tapa(self):
+        tappa = sum(1 for card in KÄIMAS if card.tappa)
+        for i in range(tappa):
+            for kaart2 in reversed(KAARDID1):
+                self.mäng.get_validmoves(kaart2)
+                if VALID:
+                    VALID.sort(key=operator.attrgetter("kaart.tugevus"))
+                    self._pane(kaart2, VALID[0])
+                    self.reset_valik()
+                    break
+        if sum(1 for card in KÄIMAS if card.tappa) > 0:
+            for kaart in TAPMAS:
+                KAARDID1.append(kaart)
+                TAPMAS.clear()
+                VÄLIVÄÄRTUS.remove(kaart.kaart.väärtus)
+            return False
+        return True
 
+    def arvuti_saada(self):
+        for kaart in KAARDID1:
+            if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
+                self.vaheta_käik()
+                self._pane(kaart)
+                return True
+        return False
+    
+    def arvuti_juurde(self):
+        for kaart in KAARDID1:
+            if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
+                if not (kaart.kaart.mast == TRUMP[0].kaart.mast and kaart.kaart.tugevus > 8):
+                    self._pane(kaart)
+                    break
+                elif len(PAKK) <= 6:
+                    self._pane(kaart)
+                    break
+                
+
+    def arvuti_käik(self):
+        if self.turn==2:
+            if not TAPMAS:
+                if not self.arvuti_tapa():
+                    if not self.arvuti_saada():
+                        for kaart in VÄLI:
+                            KAARDID1.append(kaart)
+                            kaart.tappa = True
+                        self.mäng.kaardid_maha(self.turn)
+            else:
+                if not self.arvuti_tapa():
+                    for kaart in VÄLI:
+                        KAARDID1.append(kaart)
+                        kaart.tappa = True
+                    self.mäng.kaardid_maha(self.turn)
+        else:
+            self.kaardid = [x for x in KAARDID1 if x.kaart.mast != TRUMP[0].kaart.mast]
+            if self.kaardid:
+                kaart = min(self.kaardid, key=operator.attrgetter("kaart.tugevus"))
+            else:
+                kaart = min(KAARDID1, key=operator.attrgetter("kaart.tugevus"))
+
+            if not KÄIMAS:
+                self._pane(kaart)
+            else:  
+                self.arvuti_juurde()
+            
 
     # def selectväli(self, pos):
     #     kaart = self.kas_hiir(pos)
@@ -184,6 +295,7 @@ class Loogika:
             else:
                 TAPMAS.append(kaart)
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
+                kaart2.tappa = False
                 KAARDID1.remove(kaart)
         else:
             if not kaart2:
@@ -193,6 +305,7 @@ class Loogika:
             else:
                 TAPMAS.append(kaart)
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
+                kaart2.tappa = False
                 KAARDID2.remove(kaart)
         # if len(VÄLI) == 8:
         #     self.mäng.kaardid_maha(self.turn)     

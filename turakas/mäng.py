@@ -48,13 +48,11 @@ class Mäng():
     def uus_kaart(self, mängija):
         if mängija == 1:
             while len(KAARDID1) < KÄSI and len(PAKK) != 0:
-                kaart = PAKK[0]
-                PAKK.remove(kaart)
+                kaart = PAKK.pop(0)
                 KAARDID1.append(Kaart(kaart.mast, kaart.väärtus, None))
         else:
             while len(KAARDID2) < KÄSI and len(PAKK) != 0:
-                kaart = PAKK[0]
-                PAKK.remove(kaart)
+                kaart = PAKK.pop(0)
                 KAARDID2.append(Kaart(kaart.mast, kaart.väärtus, None))
             
     def draw(self, win):
@@ -65,19 +63,21 @@ class Mäng():
         KAARDID2.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
         for i, kaard in enumerate(KAARDID1):
             kaard.pos = KOHAD1[i]
+            win.blit(kaard.pilt, kaard.pos)
         for i, kaard in enumerate(KAARDID2):
             kaard.pos = KOHAD2[i]
 
-        for kaart in KAARDID1:
-            # KAARDID1[i].pos = (100 + i*80, 50)
-            # win.blit(KAARDID1[i].pilt, (100 + i*80, 50))
-            win.blit(kaart.pilt, kaart.pos)
+        # for kaart in KAARDID1:
+        #     # KAARDID1[i].pos = (100 + i*80, 50)
+        #     # win.blit(KAARDID1[i].pilt, (100 + i*80, 50))
+        #     win.blit(kaart.pilt, kaart.pos)
 
         for kaart in KAARDID2:
             # KAARDID2[i].pos = (100 + i*80, 850-KAARDID2[i].pilt.get_height())
             # win.blit(KAARDID2[i].pilt, (100 + i*80, 850-KÕRGUS))
             win.blit(kaart.pilt, kaart.pos)
         self.draw_trump(win)
+        self.kaartide_arv(win)
         if KÄIMAS:
             for i, kaart in enumerate(KÄIMAS):
                 win.blit(kaart.pilt, kaart.pos)
@@ -127,7 +127,10 @@ class Mäng():
             if self.saab_tappa(kaart, kard) and kard.tappa:
                 VALID.append(kard)
         
-
+    def kaartide_arv(self, win):
+        roboto = pygame.font.Font("Roboto/Roboto-Light.ttf", 30)
+        arv = roboto.render(str(len(PAKK)), False, (0,0,0))
+        win.blit(arv, (95, 450-KÕRGUS/2-30))
     def draw_trump(self, win):
         trumbipilt = pygame.transform.rotozoom(self.trump.pilt, -90, 1)
         if len(PAKK) > 0:
