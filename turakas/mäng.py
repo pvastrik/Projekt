@@ -61,21 +61,20 @@ class Mäng():
         KAARDID2.sort(key=operator.attrgetter("kaart.tugevus"), reverse=True)
         KAARDID1.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
         KAARDID2.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
+
+        self.kaartide_kohad()
         for i, kaard in enumerate(KAARDID1):
-            kaard.pos = KOHAD1[i]
+            kaard.pos = KOHAD1[0][i]
             win.blit(TAGUS, kaard.pos)
+
         for i, kaard in enumerate(KAARDID2):
-            kaard.pos = KOHAD2[i]
+            kaard.pos = KOHAD2[0][i]
+            win.blit(kaard.pilt, kaard.pos)
 
-        # for kaart in KAARDID1:
-        #     # KAARDID1[i].pos = (100 + i*80, 50)
-        #     # win.blit(KAARDID1[i].pilt, (100 + i*80, 50))
+        # for kaart in KAARDID2:
+        #     # KAARDID2[i].pos = (100 + i*80, 850-KAARDID2[i].pilt.get_height())
+        #     # win.blit(KAARDID2[i].pilt, (100 + i*80, 850-KÕRGUS))
         #     win.blit(kaart.pilt, kaart.pos)
-
-        for kaart in KAARDID2:
-            # KAARDID2[i].pos = (100 + i*80, 850-KAARDID2[i].pilt.get_height())
-            # win.blit(KAARDID2[i].pilt, (100 + i*80, 850-KÕRGUS))
-            win.blit(kaart.pilt, kaart.pos)
         self.draw_trump(win)
         self.kaartide_arv(win)
         if KÄIMAS:
@@ -107,6 +106,14 @@ class Mäng():
         else:
             self.uus_kaart(1)
             self.uus_kaart(2)
+    
+    def kaartide_kohad(self):
+        if len(KAARDID1) > 10:
+            KOHAD1.clear()
+            KOHAD1.append([(100 + i*(80-(len(KAARDID1)-10)*5), 50) for i in range(30)])
+        if len(KAARDID2) > 10:
+            KOHAD2.clear()
+            KOHAD2.append([(100 + i*(80-(len(KAARDID2)-10)*5), 850-KÕRGUS) for i in range(30)])
 
     def saab_tappa(self, kaart1, kaart2):
         trumbimast = TRUMP[0].kaart.mast

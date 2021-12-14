@@ -18,5 +18,5 @@ POSX, POSY = WIDTH-(WIDTH-(650+LAIUS))/2, 450 - KÕRGUS/2
 
 KOHAD = [(POSX-i*(LAIUS+50), POSY) for i in range(KÄSI)]
 TAPMISKOHAD = [(el[0]+LAIUS/4, el[1]) for el in KOHAD]
-KOHAD1 = [(100 + i*80, 50) for i in range(15)]
-KOHAD2 = [(100 + i*40, 850-KÕRGUS) for i in range(15)]
+KOHAD1 = [[(100 + i*80, 50) for i in range(30)]]
+KOHAD2 = [[(100 + i*80, 850-KÕRGUS) for i in range(30)]]
