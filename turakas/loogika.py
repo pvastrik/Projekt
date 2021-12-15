@@ -61,12 +61,15 @@ class Loogika:
             rect_kaart = pygame.Rect(kard.pos, (LAIUS, KÕRGUS))
             if rect_kaart.collidepoint(pos):
                 return kard
-        if lõpp.rect.collidepoint(pos):
-            return 1
-        if võta.rect.collidepoint(pos):
-            return 3
-        if maha.rect.collidepoint(pos):
-            return 1
+        
+        if self.turn == 1:
+            if võta.rect.collidepoint(pos):
+                return 3
+        elif self.turn == 2:
+            if maha.rect.collidepoint(pos):
+                return 1
+            if lõpp.rect.collidepoint(pos):
+                return 1
         rect_pakk1 = pygame.Rect((50, 450-(KÕRGUS/2)), (LAIUS, KÕRGUS/2))
         if rect_pakk1.collidepoint(pos):
             return 2

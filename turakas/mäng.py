@@ -106,6 +106,9 @@ class Mäng():
             else:
                 pygame.draw.rect(win, (255, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
 
+        if not len(PAKK) and (not len(KAARDID1) or not len(KAARDID2)):
+            self.lõpp(win)
+
     def kaardid_maha(self, käik):
         TAPMAS.clear()
         KÄIMAS.clear()
@@ -160,3 +163,13 @@ class Mäng():
             trump_temp = pygame.image.load(f"img/{trump.kaart.mast}.png")
             trump = pygame.transform.scale(trump_temp, (LAIUS*0.674, LAIUS*0.674))
             win.blit(trump, (100, 450-0.337*LAIUS))
+    
+    def lõpp(self, win):
+        fade = pygame.Surface(1500, 900)
+        self.draw_bg(fade)
+        for alpha in range(0, 300):
+            fade.set_alpha(alpha)
+            self.draw(win)
+            win.blit(fade, (0,0))
+            pygame.display.update()
+            pygame.time.delay(5)
