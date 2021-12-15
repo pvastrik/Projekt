@@ -185,6 +185,7 @@ class Loogika:
             for kaart in VÄLI:
                 KAARDID2.append(kaart)
                 kaart.tappa = True
+                kaart.tapetud = None
             self.mäng.kaardid_maha(self.turn)
 
             self.mäng.draw(self.win)
@@ -278,12 +279,14 @@ class Loogika:
                         for kaart in VÄLI:
                             KAARDID1.append(kaart)
                             kaart.tappa = True
+                            kaart.tapetud = None
                         self.mäng.kaardid_maha(self.turn)
             elif len(KÄIMAS) != len(TAPMAS):
                 if not self.arvuti_tapa():
                     for kaart in VÄLI:
                         KAARDID1.append(kaart)
                         kaart.tappa = True
+                        kaart.tapetud = True
                     self.mäng.kaardid_maha(self.turn)
             else:
                 self.mäng.kaardid_maha(self.turn)
@@ -345,6 +348,7 @@ class Loogika:
             else:
                 KAARDID1.remove(kaart)
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
+                kaart.tapetud = kaart2
                 TAPMAS.append(kaart)
                 kaart2.tappa = False
         else:
@@ -355,6 +359,7 @@ class Loogika:
             else:
                 KAARDID2.remove(kaart)
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
+                kaart.tapetud = kaart2
                 TAPMAS.append(kaart)
                 kaart2.tappa = False
 

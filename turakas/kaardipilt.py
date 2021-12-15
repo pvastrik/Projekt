@@ -15,6 +15,7 @@ class Kaart:
                 temp_pilt = pygame.image.load(f"img/cards/{väärtus}{mast}.png")
             self.pilt = pygame.transform.scale(temp_pilt, (temp_pilt.get_width()/SCALE, temp_pilt.get_height()/SCALE))
             self.tappa = True
+            self.tapetud = None
         self.pos = pos
         
 

@@ -95,7 +95,7 @@ class Mäng():
         
         if TAPMAS:
             for i, kaart in enumerate(TAPMAS):
-                win.blit(kaart.pilt, TAPMISKOHAD[i])
+                win.blit(kaart.pilt, TAPMISKOHAD[KÄIMAS.index(kaart.tapetud)])
         
         for nonii in VALID:
             if not nonii.kaart:
@@ -116,8 +116,8 @@ class Mäng():
                 kordaja.append(1)
             elif len(kordaja)==1:
                 return True
-            # elif len(kordaja)==2:
-            #     self.lõpp(win, kordaja)
+            elif len(kordaja)==2:
+                self.lõpp(win, kordaja)
 
     def kaardid_maha(self, käik):
         TAPMAS.clear()
