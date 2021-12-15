@@ -75,7 +75,7 @@ class Mäng():
         self.kaartide_kohad()
         for i, kaard in enumerate(KAARDID1):
             kaard.pos = KOHAD1[0][i]
-            win.blit(kaard.pilt, kaard.pos)
+            win.blit(TAGUS, kaard.pos)
 
         for i, kaard in enumerate(KAARDID2):
             kaard.pos = KOHAD2[0][i]

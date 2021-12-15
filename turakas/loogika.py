@@ -5,6 +5,7 @@ from .constants import LAIUS, KÄIK, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
 from .pakk import Pakk, PAKK
 from .kaardipilt import Kaart
 from .nupud import Nupud
+
 Color_line = (255, 0, 0)
 class Loogika:
 
@@ -160,18 +161,25 @@ class Loogika:
         if self.kaart == 1:
             self.arvuti_käik()
         if self.kaart == 3:
+
             a = 0
             if not self.arvuti_juurde():
                 a+=1
             if a == 0:
                 self.mäng.draw(self.win)
                 pygame.display.update()
-                pygame.time.wait(1000)
+                pygame.time.wait(1500)
 
             for kaart in VÄLI:
                 KAARDID2.append(kaart)
                 kaart.tappa = True
             self.mäng.kaardid_maha(self.turn)
+
+            self.mäng.draw(self.win)
+            pygame.display.update()
+            pygame.time.wait(1500)
+            self.arvuti_käik()
+
         if not self.kaart:
             self.reset_valik()
         else:
@@ -188,8 +196,8 @@ class Loogika:
                     if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS and not TAPMAS:
                         if not VALID:
                             self.vaheta_käik()
-                            self._pane(self.kaart)
                             self.reset_valik()
+                            self._pane(self.kaart)
                         else:
                             VALID.append(Kaart(None, None, KOHAD[len(KÄIMAS)]))
                     else:
@@ -202,9 +210,10 @@ class Loogika:
                             self.vaheta_käik()
                             self._pane(self.valitud)
                         else:
-                            self._pane(self.valitud, self.kaart)
+                            valitud = self.valitud
+                            self.reset_valik()
+                            self._pane(valitud, self.kaart)
                             self.kaart.tappa = False
-                    self.reset_valik()
     def arvuti_tapa(self):
         tappa = sum(1 for card in KÄIMAS if card.tappa)
         for i in range(tappa):
@@ -255,12 +264,19 @@ class Loogika:
                             KAARDID1.append(kaart)
                             kaart.tappa = True
                         self.mäng.kaardid_maha(self.turn)
-            else:
+            elif len(KÄIMAS) != len(TAPMAS):
                 if not self.arvuti_tapa():
                     for kaart in VÄLI:
                         KAARDID1.append(kaart)
                         kaart.tappa = True
                     self.mäng.kaardid_maha(self.turn)
+            else:
+                self.mäng.kaardid_maha(self.turn)
+                self.vaheta_käik()
+                self.mäng.draw(self.win)
+                pygame.display.update()
+                pygame.time.wait(1500)
+                self.arvuti_käik()
         else:
             self.kaardid = [x for x in KAARDID1 if x.kaart.mast != TRUMP[0].kaart.mast]
             if self.kaardid:
@@ -269,10 +285,11 @@ class Loogika:
                 kaart = min(KAARDID1, key=operator.attrgetter("kaart.tugevus"))
 
             if not KÄIMAS:
-                self._pane(kaart)
-            else:  
-                self.arvuti_juurde()
-            
+                self._pane(kaart)  
+            elif not self.arvuti_juurde():
+                if len(KÄIMAS) == len(TAPMAS):
+                    self.mäng.kaardid_maha(self.turn)
+                    self.vaheta_käik()
 
     # def selectväli(self, pos):
     #     kaart = self.kas_hiir(pos)
@@ -323,6 +340,12 @@ class Loogika:
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
                 TAPMAS.append(kaart)
                 kaart2.tappa = False
+
+                self.mäng.draw(self.win)
+                pygame.display.update()
+                pygame.time.wait(1000)
+                self.arvuti_käik()
+
         # if len(VÄLI) == 8:
         #     self.mäng.kaardid_maha(self.turn)     
         #     self.vaheta_käik()   
