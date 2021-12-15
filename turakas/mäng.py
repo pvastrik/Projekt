@@ -15,13 +15,11 @@ VÄLIVÄÄRTUS = []
 TRUMP = []
 VALID =[]
 class Mäng():
+
     def __init__(self):
         self.mängija1_alles = KÄSI
         self.mängija2_alles = KÄSI
         
-        
-        
-    
     def draw_bg(self, win):
         laius = BG.get_width()  
         kõrgus = BG.get_height()
@@ -38,6 +36,7 @@ class Mäng():
                 KAARDID1.append(Kaart(kaart.mast, kaart.väärtus, None))
             else:
                 KAARDID2.append(Kaart(kaart.mast, kaart.väärtus, None))
+
         temp_trump = PAKK[0]
         PAKK.remove(temp_trump)
         PAKK.append(temp_trump)
@@ -65,17 +64,13 @@ class Mäng():
         self.kaartide_kohad()
         for i, kaard in enumerate(KAARDID1):
             kaard.pos = KOHAD1[0][i]
-            win.blit(TAGUS, kaard.pos)
+            win.blit(kaard.pilt, kaard.pos)
 
         for i, kaard in enumerate(KAARDID2):
             kaard.pos = KOHAD2[0][i]
             win.blit(kaard.pilt, kaard.pos)
 
-        # for kaart in KAARDID2:
-        #     # KAARDID2[i].pos = (100 + i*80, 850-KAARDID2[i].pilt.get_height())
-        #     # win.blit(KAARDID2[i].pilt, (100 + i*80, 850-KÕRGUS))
-        #     win.blit(kaart.pilt, kaart.pos)
-        self.draw_trump(win)
+        self.draw_trump(win, TRUMP[0])
         self.kaartide_arv(win)
         if KÄIMAS:
             for i, kaart in enumerate(KÄIMAS):
@@ -93,8 +88,7 @@ class Mäng():
                 pygame.draw.rect(win, (0, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
             else:
                 pygame.draw.rect(win, (255, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
-            #pygame.draw.circle(win, (0, 255, 0, 127), (nonii.pos[0]+LAIUS/2, nonii.pos[1]+KÕRGUS/2),20)
-            # pygame.draw.lines(win, (0, 0, 255), False, ((nonii.pos[0], nonii.pos[1]+20), nonii.pos, (nonii.pos[0]+20, nonii.pos[1])), 8)
+
     def kaardid_maha(self, käik):
         TAPMAS.clear()
         KÄIMAS.clear()
@@ -108,10 +102,10 @@ class Mäng():
             self.uus_kaart(2)
     
     def kaartide_kohad(self):
-        if len(KAARDID1) > 10:
+        if len(KAARDID1) > 10 and len(KAARDID1) < 19:
             KOHAD1.clear()
             KOHAD1.append([(100 + i*(80-(len(KAARDID1)-10)*5), 50) for i in range(30)])
-        if len(KAARDID2) > 10:
+        if len(KAARDID2) > 10 and len(KAARDID2) < 19:
             KOHAD2.clear()
             KOHAD2.append([(100 + i*(80-(len(KAARDID2)-10)*5), 850-KÕRGUS) for i in range(30)])
 
@@ -134,19 +128,18 @@ class Mäng():
                 VALID.append(kard)
         
     def kaartide_arv(self, win):
-        roboto = pygame.font.Font("Roboto/Roboto-Light.ttf", 30)
-        arv = roboto.render(str(len(PAKK)), False, (0,0,0))
-        win.blit(arv, (95, 450-KÕRGUS/2-30))
-    def draw_trump(self, win):
-        trumbipilt = pygame.transform.rotozoom(self.trump.pilt, -90, 1)
+        if len(PAKK) > 0:
+            roboto = pygame.font.Font("Roboto/Roboto-Light.ttf", 30)
+            arv = roboto.render(str(len(PAKK)), False, (0,0,0))
+            win.blit(arv, (95, 450-KÕRGUS/2-30))
+
+    def draw_trump(self, win, trump):
+        trumbipilt = pygame.transform.rotozoom(trump.pilt, -90, 1)
         if len(PAKK) > 0:
             win.blit(trumbipilt, (50, 450-(LAIUS/2)))
         if len(PAKK) > 1:
             win.blit(TAGUS, (50, 450-(KÕRGUS/2)))
         if not PAKK:
-            trump_temp = pygame.image.load(f"img/{self.trump.kaart.mast}.png")
+            trump_temp = pygame.image.load(f"img/{trump.kaart.mast}.png")
             trump = pygame.transform.scale(trump_temp, (LAIUS*0.674, LAIUS*0.674))
             win.blit(trump, (100, 450-0.337*LAIUS))
-
-    def draw_kaart(self, win, kaart):
-        win.blit(kaart, (600, 400))

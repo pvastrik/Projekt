@@ -156,6 +156,14 @@ class Loogika:
         if self.kaart == 1:
             self.arvuti_käik()
         if self.kaart == 3:
+            a = 0
+            if not self.arvuti_juurde():
+                a+=1
+            if a == 0:
+                self.mäng.draw(self.win)
+                pygame.display.update()
+                pygame.time.wait(1000)
+
             for kaart in VÄLI:
                 KAARDID2.append(kaart)
                 kaart.tappa = True
@@ -220,16 +228,20 @@ class Loogika:
         return False
     
     def arvuti_juurde(self):
+        i = 0
         for kaart in KAARDID1:
             if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
                 if not (kaart.kaart.mast == TRUMP[0].kaart.mast and kaart.kaart.tugevus > 8):
                     self._pane(kaart)
+                    i+=1
                     break
                 elif len(PAKK) <= 6:
                     self._pane(kaart)
+                    i+=1
                     break
-                
-
+        if i == 0:
+            return False
+        return True
     def arvuti_käik(self):
         if self.turn==2:
             if not TAPMAS:
