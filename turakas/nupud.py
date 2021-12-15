@@ -1,16 +1,21 @@
 import pygame
 from .constants import NUPP
 
+pygame.font.init()
 
 class Nupud():
-    def __init__(self, x, y, scale):
+    def __init__(self, x, y, scale, text_input):
         image = NUPP
         width = image.get_width()
         height = image.get_height()
+        self.x = x
+        self.y = y
         self.image = pygame.transform.scale(image, (int(width * scale), (int(height * scale))))
-        #self.text_input = text_input
-        #self.text = nupp.main_font.render(self.text_input, True, "black")
+        self.text_input = text_input
+        roboto = pygame.font.Font("Roboto/Roboto-Light.ttf", 30)
+        self.text = roboto.render(self.text_input, True, (0, 0 ,0))
         self.rect = self.image.get_rect()
+        self.text_rect = self.text.get_rect(center=(self.x+(width*scale)/2, self.y+(height*scale)/2))
         self.rect.topleft = (x, y)
         self.clicked = False
 
@@ -28,5 +33,6 @@ class Nupud():
             self.clicked = False
 
         surface.blit(self.image, (self.rect.x, self.rect.y))
+        surface.blit(self.text, self.text_rect)
 
         return action
