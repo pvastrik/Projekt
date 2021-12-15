@@ -8,6 +8,7 @@ TAPMINE = False
 
 
 #pildid
+NUPP = pygame.image.load("img/nupp2.png")
 BG = pygame.image.load("img/bg.jpg")
 tagus = pygame.image.load("img/tagus2.png")
 TAGUS = pygame.transform.scale(tagus, (tagus.get_width()/SCALE, tagus.get_height()/SCALE))

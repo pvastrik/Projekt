@@ -1,9 +1,11 @@
 import pygame
 import random
 import operator
+from .nupud import Nupud
 from .constants import WIDTH, HEIGHT, BG, KÄSI, TAGUS, KÕRGUS, LAIUS, POSX, POSY, KOHAD, TAPMISKOHAD, KOHAD1, KOHAD2
 from .pakk import PAKK, MASTID
 from .kaardipilt import Kaart
+
 
 
 KAARDID1 = []
@@ -14,6 +16,11 @@ VÄLI = []
 VÄLIVÄÄRTUS = []
 TRUMP = []
 VALID =[]
+
+lõpp = Nupud(1170, 850 - KÕRGUS, 0.6)
+võta = Nupud(1170, 850-KÕRGUS/2, 0.6)
+
+
 class Mäng():
 
     def __init__(self):
@@ -60,6 +67,10 @@ class Mäng():
         KAARDID2.sort(key=operator.attrgetter("kaart.tugevus"), reverse=True)
         KAARDID1.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
         KAARDID2.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
+
+        lõpp.draw(win)
+        võta.draw(win)
+
 
         self.kaartide_kohad()
         for i, kaard in enumerate(KAARDID1):

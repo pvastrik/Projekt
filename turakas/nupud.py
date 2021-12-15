@@ -1,14 +1,10 @@
 import pygame
+from .constants import NUPP
 
-käigu_lõpp_img = pygame.image.load("nupud/nupp2.png").convert_alpha()
-võta_üles_img = pygame.image.load("nupud/nupp2.png").convert_alpha()
-
-
-käigu_lõpp_nupp = nupumain.Nupud(1170, 600, käigu_lõpp_img, 0.6)
-võta_üles_nupp = nupumain.Nupud(1170, 680, võta_üles_img, 0.6)
 
 class Nupud():
-    def __init__(self, x, y, image, scale):
+    def __init__(self, x, y, scale):
+        image = NUPP
         width = image.get_width()
         height = image.get_height()
         self.image = pygame.transform.scale(image, (int(width * scale), (int(height * scale))))

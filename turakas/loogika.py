@@ -1,10 +1,10 @@
 import pygame
 import operator
-from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID
+from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID, võta, lõpp
 from .constants import LAIUS, KÄIK, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
 from .pakk import Pakk, PAKK
 from .kaardipilt import Kaart
-
+from .nupud import Nupud
 Color_line = (255, 0, 0)
 class Loogika:
 
@@ -56,6 +56,10 @@ class Loogika:
             rect_kaart = pygame.Rect(kard.pos, (LAIUS, KÕRGUS))
             if rect_kaart.collidepoint(pos):
                 return kard
+        if lõpp.rect.collidepoint(pos):
+            return 1
+        if võta.rect.collidepoint(pos):
+            return 3
         rect_pakk1 = pygame.Rect((50, 450-(KÕRGUS/2)), (LAIUS, KÕRGUS/2))
         if rect_pakk1.collidepoint(pos):
             return 2
