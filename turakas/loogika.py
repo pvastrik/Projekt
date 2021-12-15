@@ -1,6 +1,6 @@
 import pygame
 import operator
-from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID, võta, lõpp
+from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID, võta, lõpp, maha, KÄIK
 from .constants import LAIUS, KÄIK, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
 from .pakk import Pakk, PAKK
 from .kaardipilt import Kaart
@@ -32,8 +32,10 @@ class Loogika:
     def vaheta_käik(self):
         if self.turn == 2:
             self.turn = 1
+            KÄIK[0] = 1
         else:
             self.turn = 2
+            KÄIK[0] = 2
     def kas_hiir(self, pos):
 
         for kard in reversed(KAARDID2):  
@@ -60,6 +62,8 @@ class Loogika:
             return 1
         if võta.rect.collidepoint(pos):
             return 3
+        if maha.rect.collidepoint(pos):
+            return 2
         rect_pakk1 = pygame.Rect((50, 450-(KÕRGUS/2)), (LAIUS, KÕRGUS/2))
         if rect_pakk1.collidepoint(pos):
             return 2

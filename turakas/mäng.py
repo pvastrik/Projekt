@@ -16,9 +16,11 @@ VÄLI = []
 VÄLIVÄÄRTUS = []
 TRUMP = []
 VALID =[]
+KÄIK = [2]
+lõpp = Nupud(1250, 875 - 3*KÕRGUS/ 4, 0.6, "KÄIK")
+võta = Nupud(1250, 875-3*KÕRGUS/4, 0.6, "VÕTAN")
+maha = Nupud(1250, 875-3*KÕRGUS/4, 0.6, "MAHA")
 
-lõpp = Nupud(1170, 850 - KÕRGUS, 0.6)
-võta = Nupud(1170, 850-KÕRGUS/2, 0.6)
 
 
 class Mäng():
@@ -68,8 +70,10 @@ class Mäng():
         KAARDID1.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
         KAARDID2.sort(key=lambda mast: MASTID.index(mast.kaart.mast))
 
-        lõpp.draw(win)
-        võta.draw(win)
+        if KÄIK[0] == 2:
+            lõpp.draw(win)
+        elif KÄIK[0] == 1:
+            võta.draw(win)
 
 
         self.kaartide_kohad()
