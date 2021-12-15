@@ -3,7 +3,7 @@ import random
 import ctypes
 
 from pygame.constants import RESIZABLE
-from turakas.constants import WIDTH, HEIGHT, POSX, POSY, KÄIK
+from turakas.constants import WIDTH, HEIGHT, POSX, POSY
 from turakas.pakk import PAKK
 from turakas.mäng import Mäng
 from turakas.loogika import Loogika

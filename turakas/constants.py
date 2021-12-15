@@ -3,7 +3,6 @@ import pygame
 WIDTH, HEIGHT = 1500, 900
 KÄSI = 6
 SCALE = 4
-KÄIK = False
 TAPMINE = False
 
 

@@ -72,6 +72,8 @@ class Mäng():
 
         if KÄIK[0] == 2:
             lõpp.draw(win)
+        elif KÄIK[0] == 3:
+            maha.draw(win)
         elif KÄIK[0] == 1:
             võta.draw(win)
 
