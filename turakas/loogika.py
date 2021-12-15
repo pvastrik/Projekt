@@ -173,7 +173,7 @@ class Loogika:
         if self.kaart == 1:
             self.arvuti_käik()
         if self.kaart == 3:
-
+            self.reset_valik()
             a = 0
             if not self.arvuti_juurde():
                 a+=1

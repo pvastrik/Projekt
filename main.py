@@ -5,7 +5,7 @@ import ctypes
 from pygame.constants import RESIZABLE
 from turakas.constants import WIDTH, HEIGHT, POSX, POSY
 from turakas.pakk import PAKK
-from turakas.mäng import Mäng
+from turakas.mäng import Mäng, kordaja
 from turakas.loogika import Loogika
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2)

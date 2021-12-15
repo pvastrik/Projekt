@@ -112,7 +112,12 @@ class Mäng():
                 self.draw(win)
                 pygame.display.update()
                 pygame.time.wait(2000)
-                self.lõpp(win)
+                self.lõpp(win, kordaja)
+                kordaja.append(1)
+            elif len(kordaja)==1:
+                return True
+            # elif len(kordaja)==2:
+            #     self.lõpp(win, kordaja)
 
     def kaardid_maha(self, käik):
         TAPMAS.clear()
@@ -169,12 +174,14 @@ class Mäng():
             trump = pygame.transform.scale(trump_temp, (LAIUS*0.674, LAIUS*0.674))
             win.blit(trump, (100, 450-0.337*LAIUS))
     
-    def lõpp(self, win):
+    def lõpp(self, win, kordaja):
         fade = pygame.Surface((WIDTH, HEIGHT))
         self.draw_bg(fade)
-        for alpha in range(0, 300):
-            fade.set_alpha(alpha)
-            self.draw(win)
-            win.blit(fade, (0,0))
-            pygame.display.update()
-            pygame.time.delay(5)
+        if len(kordaja)==1:
+            for alpha in range(0, 300):
+                fade.set_alpha(alpha)
+                self.draw(win)
+                win.blit(fade, (0,0))
+                pygame.display.update()
+                pygame.time.delay(5)
+        win.blit(fade, (0,0))
