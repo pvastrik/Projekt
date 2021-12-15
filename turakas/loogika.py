@@ -58,7 +58,10 @@ class Loogika:
             if rect_kaart.collidepoint(pos):
                 return kard
         for kard in VALID:
-            rect_kaart = pygame.Rect(kard.pos, (LAIUS, KÕRGUS))
+            if not kard.kaart:
+                rect_kaart = pygame.Rect(kard.pos, (LAIUS, KÕRGUS))
+            else:
+                rect_kaart = pygame.Rect(KOHAD[KÄIMAS.index(kard)], (LAIUS, KÕRGUS))
             if rect_kaart.collidepoint(pos):
                 return kard
         

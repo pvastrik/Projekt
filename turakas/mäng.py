@@ -20,7 +20,7 @@ KÄIK = [2]
 lõpp = Nupud(1250, 875 - 3*KÕRGUS/ 4, 0.6, "KÄIK")
 võta = Nupud(1250, 875-3*KÕRGUS/4, 0.6, "VÕTAN")
 maha = Nupud(1250, 875-3*KÕRGUS/4, 0.6, "MAHA")
-
+kordaja = []
 
 
 class Mäng():
@@ -107,7 +107,12 @@ class Mäng():
                 pygame.draw.rect(win, (255, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
 
         if not len(PAKK) and (not len(KAARDID1) or not len(KAARDID2)):
-            self.lõpp(win)
+            if not kordaja:
+                kordaja.append(1)
+                self.draw(win)
+                pygame.display.update()
+                pygame.time.wait(2000)
+                self.lõpp(win)
 
     def kaardid_maha(self, käik):
         TAPMAS.clear()
@@ -165,7 +170,7 @@ class Mäng():
             win.blit(trump, (100, 450-0.337*LAIUS))
     
     def lõpp(self, win):
-        fade = pygame.Surface(1500, 900)
+        fade = pygame.Surface((WIDTH, HEIGHT))
         self.draw_bg(fade)
         for alpha in range(0, 300):
             fade.set_alpha(alpha)
