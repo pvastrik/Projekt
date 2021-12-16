@@ -195,16 +195,17 @@ class Loogika:
         else:
             if self.turn == 2:
                 if self.kaart in KAARDID2:
-                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS or not VÄLI:
-                        if not self._pane(self.kaart):
-                            return False
+                    if len(KAARDID1) >= len(KÄIMAS)+1:
+                        if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS or not VÄLI:
+                            if not self._pane(self.kaart):
+                                return False
 
             else:
                 if self.kaart in KAARDID2:  
                     self.reset_valik()
                     self.valitud = self.kaart
                     self.mäng.get_validmoves(self.kaart)
-                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS and not TAPMAS:
+                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS and not TAPMAS and len(KAARDID2) >= len(KÄIMAS)+1:
                         if not VALID:
                             self.vaheta_käik()
                             self.reset_valik()
@@ -241,6 +242,7 @@ class Loogika:
         if sum(1 for card in KÄIMAS if card.tappa) > 0:
             for kaart in TAPMAS:
                 KAARDID1.append(kaart)
+                kaart.tapetud = None
                 TAPMAS.clear()
                 VÄLIVÄÄRTUS.remove(kaart.kaart.väärtus)
             return False
@@ -251,23 +253,25 @@ class Loogika:
     def arvuti_saada(self):
         for kaart in KAARDID1:
             if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
-                self.vaheta_käik()
-                self._pane(kaart)
-                return True
+                if len(KAARDID2) >= len(KÄIMAS)+1:
+                    self.vaheta_käik()
+                    self._pane(kaart)
+                    return True
         return False
     
     def arvuti_juurde(self):
         i = 0
         for kaart in KAARDID1:
             if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
-                if not (kaart.kaart.mast == TRUMP[0].kaart.mast and kaart.kaart.tugevus > 8):
-                    self._pane(kaart)
-                    i+=1
-                    break
-                elif len(PAKK) <= 6:
-                    self._pane(kaart)
-                    i+=1
-                    break
+                if len(KAARDID2) >= len(KÄIMAS)+1:
+                    if not (kaart.kaart.mast == TRUMP[0].kaart.mast and kaart.kaart.tugevus > 8):
+                        self._pane(kaart)
+                        i+=1
+                        break
+                    elif len(PAKK) <= 6:
+                        self._pane(kaart)
+                        i+=1
+                        break
         if i == 0:
             return False
         return True
