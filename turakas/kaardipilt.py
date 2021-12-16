@@ -22,6 +22,3 @@ class Kaart:
     def get_rekt(self):
         return self.pilt.get_rect()
         
-        
-    def get_kaart(self, pos):
-        pass

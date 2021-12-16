@@ -2,7 +2,7 @@ import pygame
 import random
 import operator
 from .nupud import Nupud
-from .constants import WIDTH, HEIGHT, BG, KÄSI, TAGUS, KÕRGUS, LAIUS, POSX, POSY, KOHAD, TAPMISKOHAD, KOHAD1, KOHAD2
+from .constants import WIDTH, HEIGHT, BG, KÄSI, TAGUS, KÕRGUS, LAIUS, POSX, POSY, KOHAD, TAPMISKOHAD, KOHAD1, KOHAD2, ROBOTO, ROBOTOBLACK, TULEMUS, KOMMENTAAR, UUESTI, LOLL
 from .pakk import PAKK, MASTID
 from .kaardipilt import Kaart
 
@@ -21,6 +21,7 @@ lõpp = Nupud(1250, 875 - 3*KÕRGUS/ 4, 0.6, "KÄIK")
 võta = Nupud(1250, 875-3*KÕRGUS/4, 0.6, "VÕTAN")
 maha = Nupud(1250, 875-3*KÕRGUS/4, 0.6, "MAHA")
 kordaja = []
+LÕPP = []
 
 
 class Mäng():
@@ -106,12 +107,13 @@ class Mäng():
             else:
                 pygame.draw.rect(win, (255, 0, 0), pygame.Rect((KOHAD[KÄIMAS.index(nonii)][0]-2, KOHAD[KÄIMAS.index(nonii)][1]-2), (LAIUS+6, KÕRGUS+12)),  4, 3)
 
-        if not len(PAKK) and (not len(KAARDID1) or not len(KAARDID2)):
+        if not PAKK and (not len(KAARDID1) or not len(KAARDID2)):
+            LÕPP.append(1)
             if not kordaja:
                 kordaja.append(1)
                 self.draw(win)
                 pygame.display.update()
-                pygame.time.wait(2000)
+                pygame.time.wait(1000)
                 self.lõpp(win, kordaja)
                 kordaja.append(1)
             elif len(kordaja)==1:
@@ -159,8 +161,7 @@ class Mäng():
         
     def kaartide_arv(self, win):
         if len(PAKK) > 0:
-            roboto = pygame.font.Font("Roboto/Roboto-Light.ttf", 30)
-            arv = roboto.render(str(len(PAKK)), False, (0,0,0))
+            arv = ROBOTO.render(str(len(PAKK)), True, (0,0,0))
             win.blit(arv, (95, 450-KÕRGUS/2-30))
 
     def draw_trump(self, win, trump):
@@ -177,11 +178,40 @@ class Mäng():
     def lõpp(self, win, kordaja):
         fade = pygame.Surface((WIDTH, HEIGHT))
         self.draw_bg(fade)
+        durak = ROBOTOBLACK.render("DURAK", True, (0,0,0))
+        durak_rect = durak.get_rect(center=(WIDTH/2, HEIGHT/3))
+        võitja = ROBOTOBLACK.render("TUBLI TÖÖ!", True, (0,0,0))
+        tulemus_rect = võitja.get_rect(center=(WIDTH/2, HEIGHT/3))
+        hing = TULEMUS.render("TÕELINE VÕITJA HING!", True, (0,0,0))
+        hing_rect = hing.get_rect(center=(WIDTH/2, HEIGHT/3+130))
+        loll = LOLL.render("KUI LOLL SAAB OLLA!", True, (0,0,0))
+        loll_rect = loll.get_rect(center=(WIDTH/2+5, HEIGHT/3+130))
+        nimed = ROBOTO.render("Priidik Meelo Västrik ja Elise Õispuu", True, (0,0,0))
+        nimed_rect = nimed.get_rect(center=(WIDTH/2, 820))
+        aasta = ROBOTO.render("2021", True, (0,0,0))
+        aasta_rect = aasta.get_rect(center=(WIDTH/2, 860))
+        uuesti = UUESTI.render("Uuesti mängimiseks vajuta ekraanile", True, (0,0,0))
+        uuesti_rect = uuesti.get_rect(center=(WIDTH/2, 2*HEIGHT/3))
+        if not LÕPP:
+            fade.set_alpha(0)
+        if not KAARDID2:
+            fade.blit(võitja, tulemus_rect)
+            fade.blit(hing, hing_rect)
+            fade.blit(uuesti, uuesti_rect)
+            fade.blit(aasta, aasta_rect)
+            fade.blit(nimed, nimed_rect)
+        elif not KAARDID1:
+            fade.blit(durak, durak_rect)
+            fade.blit(loll, loll_rect)
+            fade.blit(uuesti, uuesti_rect)
+            fade.blit(aasta, aasta_rect)
+            fade.blit(nimed, nimed_rect)
+
         if len(kordaja)==1:
-            for alpha in range(0, 300):
+            for alpha in range(0, 300, 3):
                 fade.set_alpha(alpha)
                 self.draw(win)
                 win.blit(fade, (0,0))
                 pygame.display.update()
-                pygame.time.delay(5)
+                pygame.time.delay(1)
         win.blit(fade, (0,0))

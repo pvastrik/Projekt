@@ -10,7 +10,10 @@ class Pakk():
         self.mast = mast
         self.väärtus = väärtus
         self.tugevus = väärtused[self.väärtus]
-       
-for mast in MASTID:
-    for kaart1 in kaardid:
-        PAKK.append(Pakk(mast, kaart1))
+
+def tee_pakk():
+    for mast in MASTID:
+        for kaart1 in kaardid:
+            PAKK.append(Pakk(mast, kaart1))
+            
+tee_pakk()
