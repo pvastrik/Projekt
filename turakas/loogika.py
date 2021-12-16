@@ -167,9 +167,9 @@ class Loogika:
         if self.kaart == 2:
             self.mäng.kaardid_maha(self.turn)
             self.vaheta_käik()
-        if self.kaart == 1:
+        elif self.kaart == 1:
             self.arvuti_käik()
-        if self.kaart == 3:
+        elif self.kaart == 3:
             self.reset_valik()
             a = 0
             if not self.arvuti_juurde():
@@ -190,7 +190,7 @@ class Loogika:
             pygame.time.wait(1500)
             self.arvuti_käik()
 
-        if not self.kaart:
+        elif not self.kaart:
             self.reset_valik()
         else:
             if self.turn == 2:
@@ -218,7 +218,7 @@ class Loogika:
                         self.mäng.get_validmoves(self.kaart)
                 elif self.valitud:
                     if self.kaart in VALID:
-                        if not self.kaart.kaart:
+                        if not self.kaart.kaart and len(KAARDID2)+len(TAPMAS) >= len(KÄIMAS)+1:
                             valitud= self.valitud
                             self.reset_valik()
                             self.vaheta_käik()
@@ -244,11 +244,13 @@ class Loogika:
                 KAARDID1.append(kaart)
                 kaart.tapetud = None
                 kaart.tappa = True
-                TAPMAS.clear()
                 VÄLIVÄÄRTUS.remove(kaart.kaart.väärtus)
+            TAPMAS.clear()
+
             return False
-        KÄIK.clear()
-        KÄIK.append(3)
+        if VÄLI:
+            KÄIK.clear()
+            KÄIK.append(3)
         return True
 
     def arvuti_saada(self):
@@ -288,8 +290,10 @@ class Loogika:
                             kaart.tapetud = None
                         self.mäng.kaardid_maha(self.turn)
             elif len(KÄIMAS) != len(TAPMAS):
+                print(1)
                 if not self.arvuti_tapa():
                     for kaart in VÄLI:
+                        print(kaart.kaart.mast, kaart.kaart.väärtus)
                         KAARDID1.append(kaart)
                         kaart.tappa = True
                         kaart.tapetud = None
