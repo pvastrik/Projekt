@@ -15,6 +15,7 @@ def tee_pakk():
     i=0
     for mast in MASTID:
         for kaart1 in kaardid:
-            PAKK.append(Pakk(mast, kaart1))
+            if len(PAKK) < 13:
+                PAKK.append(Pakk(mast, kaart1))
             
 tee_pakk()

@@ -44,7 +44,7 @@ def main():
                 pos = pygame.mouse.get_pos()
                 loogika.select2(pos)
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] and LÕPP:
             loogika.reset()
                     
 

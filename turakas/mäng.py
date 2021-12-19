@@ -217,9 +217,6 @@ class Mäng():
                 pygame.time.delay(1)
             LÕPP.append(1)
         win.blit(fade, (0,0))
-        pygame.display.update()
-        pygame.time.wait(1500)
-        LÕPP.append(1)
 
     def animatsioon(self, win, kaart, alg, siht):
         x = (siht[0]-alg[0])/60

@@ -162,9 +162,6 @@ class Loogika:
     def select2(self, pos):
         if len(LÕPP) == 1:
             return True
-        # elif LÕPP:
-        #     self.reset()
-        #     return True
         else:
             self.kaart = self.kas_hiir(pos)
         if self.kaart == 2:
