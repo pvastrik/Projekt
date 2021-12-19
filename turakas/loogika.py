@@ -1,7 +1,7 @@
 import pygame
 import operator
 from .mäng import Mäng, KAARDID2, KAARDID1, KÄIMAS, TAPMAS, VÄLI, VÄLIVÄÄRTUS, TRUMP, VALID, võta, lõpp, maha, KÄIK, LÕPP, kordaja
-from .constants import LAIUS, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD
+from .constants import LAIUS, TAPMINE, TAPMISKOHAD, TAGUS, KÕRGUS, KOHAD, PAUS
 from .pakk import Pakk, PAKK, tee_pakk
 from .kaardipilt import Kaart
 from .nupud import Nupud
@@ -160,35 +160,41 @@ class Loogika:
                     
                     
     def select2(self, pos):
-        if LÕPP:
-            self.reset()
+        if len(LÕPP) == 1:
             return True
-        self.kaart = self.kas_hiir(pos)
+        # elif LÕPP:
+        #     self.reset()
+        #     return True
+        else:
+            self.kaart = self.kas_hiir(pos)
         if self.kaart == 2:
             self.mäng.kaardid_maha(self.turn)
             self.vaheta_käik()
         elif self.kaart == 1:
             self.arvuti_käik()
         elif self.kaart == 3:
-            self.reset_valik()
-            a = 0
-            if not self.arvuti_juurde():
-                a+=1
-            if a == 0:
+            if len(TAPMAS) != len(KÄIMAS):
+                self.reset_valik()
+                a = 0
+                if not self.arvuti_juurde():
+                    a+=1
+                if a == 0:
+                    self.mäng.draw(self.win)
+                    pygame.display.update()
+                    PAUS.append(1)
+                    pygame.time.wait(1500)
+
+                for kaart in VÄLI:
+                    KAARDID2.append(kaart)
+                    kaart.tappa = True
+                    kaart.tapetud = None
+                self.mäng.kaardid_maha(self.turn)
+
                 self.mäng.draw(self.win)
                 pygame.display.update()
+                PAUS.append(1)
                 pygame.time.wait(1500)
-
-            for kaart in VÄLI:
-                KAARDID2.append(kaart)
-                kaart.tappa = True
-                kaart.tapetud = None
-            self.mäng.kaardid_maha(self.turn)
-
-            self.mäng.draw(self.win)
-            pygame.display.update()
-            pygame.time.wait(1500)
-            self.arvuti_käik()
+                self.arvuti_käik()
 
         elif not self.kaart:
             self.reset_valik()
@@ -205,7 +211,7 @@ class Loogika:
                     self.reset_valik()
                     self.valitud = self.kaart
                     self.mäng.get_validmoves(self.kaart)
-                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS and not TAPMAS and len(KAARDID2)+len(TAPMAS) >= len(KÄIMAS)+1:
+                    if self.kaart.kaart.väärtus in VÄLIVÄÄRTUS and not TAPMAS and len(KAARDID1)+len(TAPMAS) >= len(KÄIMAS)+1:
                         if not VALID:
                             self.vaheta_käik()
                             self.reset_valik()
@@ -218,7 +224,7 @@ class Loogika:
                         self.mäng.get_validmoves(self.kaart)
                 elif self.valitud:
                     if self.kaart in VALID:
-                        if not self.kaart.kaart and len(KAARDID2)+len(TAPMAS) >= len(KÄIMAS)+1:
+                        if not self.kaart.kaart and len(KAARDID1    )+len(TAPMAS) >= len(KÄIMAS)+1:
                             valitud= self.valitud
                             self.reset_valik()
                             self.vaheta_käik()
@@ -240,12 +246,13 @@ class Loogika:
                     self.reset_valik()
                     break
         if sum(1 for card in KÄIMAS if card.tappa) > 0:
-            for kaart in TAPMAS:
-                KAARDID1.append(kaart)
-                kaart.tapetud = None
-                kaart.tappa = True
-                VÄLIVÄÄRTUS.remove(kaart.kaart.väärtus)
-            TAPMAS.clear()
+            # for kaart in TAPMAS:
+
+            #     KAARDID1.append(kaart)
+            #     kaart.tapetud = None
+            #     kaart.tappa = True
+            #     VÄLIVÄÄRTUS.remove(kaart.kaart.väärtus)
+            # TAPMAS.clear()
 
             return False
         if VÄLI:
@@ -255,6 +262,8 @@ class Loogika:
 
     def arvuti_saada(self):
         for kaart in KAARDID1:
+            if kaart.kaart.mast == TRUMP[0].kaart.mast and len(PAKK) > 6 and kaart.kaart.tugevus > 8:
+                continue
             if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
                 if len(KAARDID2) >= len(KÄIMAS)+1:
                     self.vaheta_käik()
@@ -264,17 +273,18 @@ class Loogika:
     
     def arvuti_juurde(self):
         i = 0
-        for kaart in KAARDID1:
-            if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
-                if len(KAARDID2)+len(TAPMAS) >= len(KÄIMAS)+1:
-                    if not (kaart.kaart.mast == TRUMP[0].kaart.mast and kaart.kaart.tugevus > 8):
-                        self._pane(kaart)
-                        i+=1
-                        break
-                    elif len(PAKK) <= 6:
-                        self._pane(kaart)
-                        i+=1
-                        break
+        if self.turn == 1:
+            for kaart in KAARDID1:
+                if kaart.kaart.väärtus in VÄLIVÄÄRTUS:
+                    if len(KAARDID2)+len(TAPMAS) >= len(KÄIMAS)+1:
+                        if not (kaart.kaart.mast == TRUMP[0].kaart.mast and kaart.kaart.tugevus > 8):
+                            self._pane(kaart)
+                            i+=1
+                            break
+                        elif len(PAKK) <= 6:
+                            self._pane(kaart)
+                            i+=1
+                            break
         if i == 0:
             return False
         return True
@@ -282,18 +292,16 @@ class Loogika:
     def arvuti_käik(self):
         if self.turn==2:
             if not TAPMAS:
-                if not self.arvuti_tapa():
-                    if not self.arvuti_saada():
+                if not self.arvuti_saada():
+                    if not self.arvuti_tapa():
                         for kaart in VÄLI:
                             KAARDID1.append(kaart)
                             kaart.tappa = True
                             kaart.tapetud = None
                         self.mäng.kaardid_maha(self.turn)
             elif len(KÄIMAS) != len(TAPMAS):
-                print(1)
                 if not self.arvuti_tapa():
                     for kaart in VÄLI:
-                        print(kaart.kaart.mast, kaart.kaart.väärtus)
                         KAARDID1.append(kaart)
                         kaart.tappa = True
                         kaart.tapetud = None
@@ -303,6 +311,7 @@ class Loogika:
                 self.vaheta_käik()
                 self.mäng.draw(self.win)
                 pygame.display.update()
+                PAUS.append(1)
                 pygame.time.wait(1500)
                 self.arvuti_käik()
         else:
@@ -316,6 +325,7 @@ class Loogika:
                 self._pane(kaart)  
             elif not self.arvuti_juurde():
                 if len(KÄIMAS) == len(TAPMAS):
+                    PAUS.append(1)
                     pygame.time.wait(1000)
                     self.mäng.kaardid_maha(self.turn)
                     self.vaheta_käik()
@@ -326,12 +336,14 @@ class Loogika:
         if self.turn == 2:
             if not kaart2:
                 KAARDID2.remove(kaart)
+                # self.mäng.animatsioon(self.win, kaart, kaart.pos, KOHAD[len(KÄIMAS)])
                 kaart.pos = KOHAD[len(KÄIMAS)]
                 KÄIMAS.append(kaart)
                 KÄIK.clear()
                 KÄIK.append(2)
             else:
                 KAARDID1.remove(kaart)
+                # self.mäng.animatsioon(self.win, kaart, kaart.pos, TAPMISKOHAD[KÄIMAS.index(kaart2)])
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
                 kaart.tapetud = kaart2
                 TAPMAS.append(kaart)
@@ -339,10 +351,12 @@ class Loogika:
         else:
             if not kaart2:
                 KAARDID1.remove(kaart)
+                # self.mäng.animatsioon(self.win, kaart, kaart.pos, KOHAD[len(KÄIMAS)])
                 kaart.pos = KOHAD[len(KÄIMAS)]
                 KÄIMAS.append(kaart)
             else:
                 KAARDID2.remove(kaart)
+                # self.mäng.animatsioon(self.win, kaart, kaart.pos, TAPMISKOHAD[KÄIMAS.index(kaart2)])
                 kaart.pos = TAPMISKOHAD[KÄIMAS.index(kaart2)]
                 kaart.tapetud = kaart2
                 TAPMAS.append(kaart)

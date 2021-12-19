@@ -2,11 +2,10 @@ import pygame
 import random
 import ctypes
 
-from pygame.constants import RESIZABLE
 from turakas.constants import WIDTH, HEIGHT, POSX, POSY
 from turakas.pakk import Pakk
-from turakas.mäng import Mäng, kordaja
-from turakas.loogika import Loogika
+from turakas.mäng import Mäng, LÕPP
+from turakas.loogika import Loogika, PAUS
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
@@ -32,16 +31,21 @@ def main():
 
     while True:
         clock.tick(FPS)
-        
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        if PAUS:
+            events.clear()
+            PAUS.clear()
+        for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                if not loogika.select2(pos):
-                    continue
                 
+            if event.type == pygame.MOUSEBUTTONDOWN and not PAUS:
+                pos = pygame.mouse.get_pos()
+                loogika.select2(pos)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            loogika.reset()
                     
 
         

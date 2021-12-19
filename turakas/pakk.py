@@ -12,6 +12,7 @@ class Pakk():
         self.tugevus = väärtused[self.väärtus]
 
 def tee_pakk():
+    i=0
     for mast in MASTID:
         for kaart1 in kaardid:
             PAKK.append(Pakk(mast, kaart1))

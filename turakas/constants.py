@@ -5,6 +5,8 @@ WIDTH, HEIGHT = 1500, 900
 KÄSI = 6
 SCALE = 4
 TAPMINE = False
+PAUS = []
+
 
 #pildid
 NUPP = pygame.image.load("img/nupp2.png")
@@ -15,12 +17,13 @@ LAIUS = TAGUS.get_width()
 KÕRGUS = TAGUS.get_height()
 
 POSX, POSY = WIDTH-(WIDTH-(650+LAIUS))/2+100, 450 - KÕRGUS/2
-ROBOTO = pygame.font.Font("Roboto/Roboto-Light.ttf", 30)
-ROBOTOBLACK = pygame.font.Font("Roboto/Roboto-Black.ttf", 200)
-TULEMUS = pygame.font.Font("Roboto/Roboto-Light.ttf", 100)
-KOMMENTAAR = pygame.font.Font("Roboto/Roboto-Light.ttf", 50)
-UUESTI = pygame.font.Font("Roboto/Roboto-Light.ttf", 35)
-LOLL = pygame.font.Font("Roboto/Roboto-Light.ttf", 70)
+FONT = pygame.font.Font("Montserrat/Montserrat-Regular.ttf", 30)
+FONT2 = pygame.font.Font("Montserrat/Montserrat-Light.ttf", 30) 
+FONTBLACK = pygame.font.Font("Montserrat/Montserrat-Black.ttf", 200)
+TULEMUS = pygame.font.Font("Montserrat/Montserrat-Light.ttf", 100)
+KOMMENTAAR = pygame.font.Font("Montserrat/Montserrat-Light.ttf", 50)
+UUESTI = pygame.font.Font("Montserrat/Montserrat-Light.ttf", 35)
+LOLL = pygame.font.Font("Montserrat/Montserrat-Light.ttf", 70)
 
 
 

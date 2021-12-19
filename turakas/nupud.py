@@ -1,5 +1,5 @@
 import pygame
-from .constants import NUPP, ROBOTO
+from .constants import NUPP, FONT
 
 
 class Nupud():
@@ -11,7 +11,7 @@ class Nupud():
         self.y = y
         self.image = pygame.transform.scale(image, (int(width * scale), (int(height * scale))))
         self.text_input = text_input
-        self.text = ROBOTO.render(self.text_input, True, (0, 0 ,0))
+        self.text = FONT.render(self.text_input, True, (0, 0 ,0))
         self.rect = self.image.get_rect()
         self.text_rect = self.text.get_rect(center=(self.x+(width*scale)/2, self.y+(height*scale)/2))
         self.rect.topleft = (x, y)
