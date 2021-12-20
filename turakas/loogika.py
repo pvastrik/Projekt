@@ -160,7 +160,7 @@ class Loogika:
                     
                     
     def select2(self, pos):
-        if len(LÕPP) == 1:
+        if LÕPP:
             return True
         else:
             self.kaart = self.kas_hiir(pos)
@@ -361,6 +361,7 @@ class Loogika:
 
                 self.mäng.draw(self.win)
                 pygame.display.update()
-                pygame.time.wait(1000)
+                PAUS.append(2)
+                pygame.time.wait(500)
                 self.arvuti_käik()
  
